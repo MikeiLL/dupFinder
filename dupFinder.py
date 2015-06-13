@@ -1,5 +1,5 @@
 # dupFinder.py
-import os, sys
+import os, sys, shutil
 import hashlib
  
 def findDup(parentFolder):
@@ -47,10 +47,18 @@ def printResults(dict1):
     if len(results) > 0:
         print('Duplicates Found:')
         print('The following files are identical. The name could differ, but the content is identical')
-        print('___________________')
+        print('^^^^^^^^^^^^^^^^^')
+        count = 0
         for result in results:
             for subresult in result:
-                print('\t\t%s' % subresult)
+                if count == 0:
+			print('I will keep %s.' % subresult)
+			count += 1
+		elif 'testrun' in globals():
+			print('\t\tWILL BE DELETED: %s' % subresult)
+		else:
+                	print('\t\tDELETING: %s' % subresult)
+			os.remove(subresult)
             print('___________________')
  
     else:
@@ -60,7 +68,10 @@ def printResults(dict1):
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         dups = {}
-        folders = sys.argv[1:]
+	if sys.argv[1] == '-t':
+		testrun = 1
+        	folders = sys.argv[2:]
+	else: folders = sys.argv[1:]
         for i in folders:
             # Iterate the folders given
             if os.path.exists(i):
