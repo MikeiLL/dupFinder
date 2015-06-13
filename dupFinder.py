@@ -1,5 +1,5 @@
 # dupFinder.py
-import os, sys, shutil
+import os, sys, shutil, datetime
 import hashlib
  
 def findDup(parentFolder):
@@ -44,6 +44,10 @@ def hashfile(path, blocksize = 65536):
  
 def printResults(dict1):
     results = list(filter(lambda x: len(x) > 1, dict1.values()))
+    if 'testrun' in globals():
+    	backupdir = 'removed_' + str(datetime.datetime.now())
+    	if not os.path.exists(backupdir):
+    		os.makedirs(backupdir)
     if len(results) > 0:
         print('Duplicates Found:')
         print('The following files are identical. The name could differ, but the content is identical')
@@ -52,13 +56,13 @@ def printResults(dict1):
         for result in results:
             for subresult in result:
                 if count == 0:
-			print('I will keep %s.' % subresult)
+			print('KEEPING ONE COPY: %s.' % subresult)
 			count += 1
 		elif 'testrun' in globals():
-			print('\t\tWILL BE DELETED: %s' % subresult)
+			print('\t\t %s WILL BE REMOVED TO: %s' % (subresult, backupdir))
 		else:
-                	print('\t\tDELETING: %s' % subresult)
-			os.remove(subresult)
+                	print('\t\tREMOVING %s TO %s' % (subresult, backupdir))
+			shutil.move(subresult, backupdir)
             print('___________________')
  
     else:
@@ -82,4 +86,4 @@ if __name__ == '__main__':
                 sys.exit()
         printResults(dups)
     else:
-        print('Usage: python dupFinder.py folder or python dupFinder.py folder1 folder2 folder3')
+        print('Usage: python dupFinder.py [-t] folder or python [-t] dupFinder.py folder1 folder2 folder3')
