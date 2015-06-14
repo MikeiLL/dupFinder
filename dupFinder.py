@@ -90,6 +90,12 @@ def handle_results(dict1, testrun=0):
         print('No duplicate files found.')
  
 def main(args): 
+    """
+    Do the work of the program if args provided, or exit and show usage.
+    """
+    if not len(args) > 1:
+        print(usage)
+        sys.exit()
     dups = {}
     if args[1] == '-t':
         testrun = 1
@@ -108,9 +114,5 @@ def main(args):
     handle_results(dups, testrun)
 
 if __name__ == '__main__':
-    if not len(sys.argv) > 1:
-        print(usage)
-        sys.exit()
-    else:
-        main(sys.argv)
+    main(sys.argv)
 
