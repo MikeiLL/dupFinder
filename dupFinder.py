@@ -31,7 +31,9 @@ def find_duplicates(parentFolder):
  
 def join_dicts(dict1, dict2):
     """
-    
+    Combine two dictionaires, by adding to key in dict one if exists, or creating a new key if not.
+
+    We use this to create a single hash-keyed dictionary of all files sent to the scripts.
     """
     for key in dict2.keys():
         if key in dict1:
@@ -42,7 +44,8 @@ def join_dicts(dict1, dict2):
  
 def hashfile(path, blocksize = 65536):
     """
-    Build and return hash by reading file in blocks and updating the md5 instance.
+    Create an md5 hash instance from a file by reading the binary data in blocks of 2**16 bytes 
+    and updating hash accordingly.
     """
     print(path)
     afile = open(path, 'rb')
@@ -87,24 +90,27 @@ def handle_results(dict1, testrun=0):
         print('No duplicate files found.')
  
 def main(args): 
-    if len(args) > 1:
-        dups = {}
-	if args[1] == '-t':
-		testrun = 1
-        	folders = args[2:]
-	else: folders = args[1:]
-        for i in folders:
-            # Iterate the folders given
-            if os.path.exists(i):
-                # Find the duplicated files and append them to the dups
-                join_dicts(dups, find_duplicates(i))
-            else:
-                print('%s is not a valid path, please verify' % i)
-                sys.exit()
-        handle_results(dups, testrun)
+    dups = {}
+    if args[1] == '-t':
+        testrun = 1
+        directories = args[2:]
     else:
-        print(usage)
+        testrun = 0
+        directories = args[1:]
+    for i in directories:
+        # Iterate the folders given
+        if os.path.exists(i):
+            # Find the duplicated files and append them to the dups
+            join_dicts(dups, find_duplicates(i))
+        else:
+            print('%s is not a valid path, please verify' % i)
+            sys.exit()
+    handle_results(dups, testrun)
 
 if __name__ == '__main__':
-    main(sys.argv)
+    if not len(sys.argv) > 0:
+        print(usage)
+        sys.exit()
+    else:
+        main(sys.argv)
 
