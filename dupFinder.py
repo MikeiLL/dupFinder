@@ -108,7 +108,7 @@ def main(args):
     handle_results(dups, testrun)
 
 if __name__ == '__main__':
-    if not len(sys.argv) > 0:
+    if not len(sys.argv) > 1:
         print(usage)
         sys.exit()
     else:
