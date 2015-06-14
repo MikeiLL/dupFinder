@@ -47,14 +47,13 @@ def hashfile(path, blocksize = 65536):
     Create an md5 hash instance from a file by reading the binary data in blocks of 2**16 bytes 
     and updating hash accordingly.
     """
-    print(path)
-    afile = open(path, 'rb')
-    hasher = md5()
-    buf = afile.read(blocksize)
-    while len(buf) > 0:
-        hasher.update(buf)
+    with open(path, 'rb') as afile:
+        hasher = md5()
         buf = afile.read(blocksize)
-    afile.close()
+        while len(buf) > 0:
+            hasher.update(buf)
+            buf = afile.read(blocksize)
+        afile.close()
     return hasher.hexdigest()
  
  
@@ -103,13 +102,13 @@ def main(args):
     else:
         testrun = 0
         directories = args[1:]
-    for i in directories:
+    for dir in directories:
         # Iterate the folders given
-        if os.path.exists(i):
+        if os.path.exists(dir):
             # Find the duplicated files and append them to the dups
-            join_dicts(dups, find_duplicates(i))
+            join_dicts(dups, find_duplicates(dir))
         else:
-            print('%s is not a valid path, please verify' % i)
+            print('\'%s\' is not a valid path, please verify' % dir)
             sys.exit()
     handle_results(dups, testrun)
 
