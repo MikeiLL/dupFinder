@@ -44,10 +44,12 @@ def hashfile(path, blocksize = 65536):
  
 def printResults(dict1):
     results = list(filter(lambda x: len(x) > 1, dict1.values()))
-    if 'testrun' in globals():
+    if not 'testrun' in globals():
     	backupdir = 'removed_' + str(datetime.datetime.now())
     	if not os.path.exists(backupdir):
     		os.makedirs(backupdir)
+    else:
+	backupdir = 'backup_fir_date_now'
     if len(results) > 0:
         print('Duplicates Found:')
         print('The following files are identical. The name could differ, but the content is identical')
@@ -62,7 +64,11 @@ def printResults(dict1):
 			print('\t\t %s WILL BE REMOVED TO: %s' % (subresult, backupdir))
 		else:
                 	print('\t\tREMOVING %s TO %s' % (subresult, backupdir))
-			shutil.move(subresult, backupdir)
+			try:
+				shutil.move(subresult, backupdir)
+			except shutil.Error:
+				print ('\t\t EXISTS. DELETING.')
+				os.remove(subresult)
             print('___________________')
  
     else:
