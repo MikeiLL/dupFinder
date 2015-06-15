@@ -58,6 +58,11 @@ def hashfile(path, blocksize = 65536):
  
  
 def handle_results(dict1, testrun=0):
+    """
+    Get the BIG dictionary of all files per hash, and remove all but the first copy of each duplicate
+    file as compared by sha256 hash.
+    """
+    #Make a list of all the files for which there is more than one per hash
     results = list(filter(lambda x: len(x) > 1, dict1.values()))
     if not testrun:
     	backupdir = 'removed_' + str(datetime.now())
