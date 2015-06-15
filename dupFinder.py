@@ -3,7 +3,7 @@ import os
 import sys
 from shutil import move
 from datetime import datetime
-from hashlib import md5
+from hashlib import sha256, md5
 
 usage = 'Usage: python dupFinder.py [-t] folder or python [-t] dupFinder.py folder1 folder2 folder3'
 
@@ -44,7 +44,7 @@ def join_dicts(dict1, dict2):
  
 def hashfile(path, blocksize = 65536):
     """
-    Create an md5 hash instance from a file by reading the binary data in blocks of 2**16 bytes 
+    Create a sha256 hash instance from a file by reading the binary data in blocks of 2**16 bytes 
     and updating hash accordingly.
     """
     with open(path, 'rb') as afile:
