@@ -3,7 +3,7 @@ import os
 import sys
 from shutil import move
 from datetime import datetime
-from hashlib import sha256, md5
+from hashlib import sha256
 
 usage = 'Usage: python dupFinder.py [-t] folder or python [-t] dupFinder.py folder1 folder2 folder3'
 
@@ -48,7 +48,7 @@ def hashfile(path, blocksize = 65536):
     and updating hash accordingly.
     """
     with open(path, 'rb') as afile:
-        hasher = md5()
+        hasher = sha256()
         buf = afile.read(blocksize)
         while len(buf) > 0:
             hasher.update(buf)
@@ -74,8 +74,9 @@ def handle_results(dict1, testrun=0):
                 if count == 0:
                     print('KEEPING ONE COPY: %s.' % subresult)
                     count += 1
-                if testrun:
+                elif testrun:
                     print('\t\t %s WILL BE REMOVED TO: %s' % (subresult, backupdir))
+                    count += 1
                 else:
                     print('\t\tREMOVING %s TO %s' % (subresult, backupdir))
                     try:
