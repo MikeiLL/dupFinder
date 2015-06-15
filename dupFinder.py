@@ -49,10 +49,11 @@ def hashfile(path, blocksize = 65536):
     """
     with open(path, 'rb') as afile:
         hasher = sha256()
-        buf = afile.read(blocksize)
-        while len(buf) > 0:
-            hasher.update(buf)
+        while True: 
             buf = afile.read(blocksize)
+            if not buf:
+                break
+            hasher.update(buf)
     return hasher.hexdigest()
  
  
