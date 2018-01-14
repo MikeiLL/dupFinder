@@ -1,4 +1,7 @@
 # dupFinder
+
+# NOTE # At the moment this script is buggy and removes some unique files.
+
 Find and potentially delete duplicate files between multiple directories, even if they have different names but the same content.
 
 Install by cloning this repository:
